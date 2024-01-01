@@ -12,7 +12,7 @@ private:
 
 public:
     void show(){
-        cout<<"Marks are: ";
+        cout<<"marks are: ";
         for (int i = 0; i<marks.size();i++){
             cout<<marks[i]<<" ";
         }
@@ -44,8 +44,9 @@ public:
 };
 
 class Teacher{
-private:
+protected:
     bool mood = rand()%2;
+    int mood_counter = 0;
 public:
     void setMood(bool moo = 1){
         mood = moo;
@@ -53,6 +54,7 @@ public:
         else cout<<"Mood is well"<<endl;
     }
      virtual void markStudent(Student &student){
+
         int randVal = rand() % 2;
 
         if ((mood == 1) && (student.isFivePointer()))
@@ -63,6 +65,39 @@ public:
             student.giveMark(4);
         else if ((mood == 0) && !(student.isFivePointer()))
             student.giveMark(3*randVal + 2*(1-randVal));
+        mood_counter ++;
+        if (mood_counter % 5 == 0){
+
+            int mood_change = rand();
+            setMood(mood_change % 2);
+        }
+
+
+    }
+};
+
+class UnstableMood_Teaher: Teacher{
+private:
+    bool mood = rand()%2;
+public:
+    void markStudent(Student &student) override{
+        int randVal = rand() % 2;
+
+        if ((mood == 1) && (student.isFivePointer()))
+            student.giveMark(5);
+        else if ((mood == 0) && (student.isFivePointer()))
+            student.giveMark(5*randVal + 4*(1-randVal));
+        else if ((mood == 1) && !(student.isFivePointer()))
+            student.giveMark(4);
+        else if ((mood == 0) && !(student.isFivePointer()))
+            student.giveMark(3*randVal + 2*(1-randVal));
+        mood_counter += randVal;
+        if (mood_counter % 2 == 0){
+
+            int mood_change = rand();
+            setMood(mood_change % 2);
+        }
+
     }
 };
 
@@ -105,10 +140,16 @@ public:
         }
     }
 
+    void giveAllMarks(UnstableMood_Teaher &teach){
+        for (int i = 0; i<studList.size();i++){
+            teach.markStudent(studList[i]);
+        }
+    }
+
     void showw(){
         int num = 0;
         for (int i = 0; i<studList.size();i++){
-            num ++; cout<<num<<" student's marks are: ";
+            num ++; cout<<num<<" student's ";
             studList[i].show();
         }
         cout<<endl;
@@ -138,19 +179,24 @@ int main()
     art.addStudent(c);
     art.addStudent(d);
     art.giveAllMarks(t);
+    art.giveAllMarks(t);
+    art.giveAllMarks(t);
+    art.giveAllMarks(t);
+    art.giveAllMarks(t);
     art.showw();
 
-    FiveGiver_Tecaher t2;
-    Class hist;
-    hist.addStudent(b);
-    hist.giveAllMarks(t2);
-    hist.showw();
-
-    TwoGiver_Teacher t3;
-    Class math;
-    math.addStudent(d);
-    math.giveAllMarks(t3);
-    math.showw();
+    Class mat;
+    mat.addStudent(a);
+    mat.addStudent(b);
+    mat.addStudent(c);
+    mat.addStudent(d);
+    UnstableMood_Teaher t3;
+    mat.giveAllMarks(t3);
+    mat.giveAllMarks(t3);
+    mat.giveAllMarks(t3);
+    mat.giveAllMarks(t3);
+    mat.giveAllMarks(t3);
+    mat.showw();
 
     return 0;
 }
