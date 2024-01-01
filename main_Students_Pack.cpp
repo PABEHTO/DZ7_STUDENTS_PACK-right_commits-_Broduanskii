@@ -3,13 +3,12 @@
 
 using namespace std;
 
-class student{
+class Student{
 private:
 
     vector<int> marks;
 
 public:
-
     void giveMark(int m){
         marks.push_back(m);
     }
@@ -31,17 +30,24 @@ public:
     }
 };
 
+class Teacher{
+public:
+    void markStudent(Student &student, int MARK){
+        student.giveMark(MARK);
+    }
+};
+
 int main()
 {
-    student a;
+    Student a;
     a.giveMark(5);
     a.giveMark(5);
     a.isFivePointer();
 
-    student b;
-    b.giveMark(5);
-    b.giveMark(4);
-    b.isFivePointer();
+    Teacher t;
+    t.markStudent(a,4);
+
+    a.isFivePointer();
 
     return 0;
 }
