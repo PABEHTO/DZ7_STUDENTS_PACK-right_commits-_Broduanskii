@@ -52,7 +52,7 @@ public:
         if (mood == 0) cout<<"Mood is bad"<<endl;
         else cout<<"Mood is well"<<endl;
     }
-    void markStudent(Student &student){
+     virtual void markStudent(Student &student){
         int randVal = rand() % 2;
 
         if ((mood == 1) && (student.isFivePointer()))
@@ -66,12 +66,40 @@ public:
     }
 };
 
+class FiveGiver_Tecaher: Teacher{
+public:
+
+    void markStudent(Student &student) override{
+        student.giveMark(5);
+    }
+};
+
+class TwoGiver_Teacher: Teacher{
+public:
+
+    void markStudent(Student &student) override{
+        student.giveMark(2);
+    }
+};
+
 class Class{
 public:
     void addStudent(Student &stud){
         studList.push_back(stud);
     }
     void giveAllMarks(Teacher &teach){
+        for (int i = 0; i<studList.size();i++){
+            teach.markStudent(studList[i]);
+        }
+    }
+
+    void giveAllMarks(FiveGiver_Tecaher &teach){
+        for (int i = 0; i<studList.size();i++){
+            teach.markStudent(studList[i]);
+        }
+    }
+
+    void giveAllMarks(TwoGiver_Teacher &teach){
         for (int i = 0; i<studList.size();i++){
             teach.markStudent(studList[i]);
         }
@@ -110,8 +138,19 @@ int main()
     art.addStudent(c);
     art.addStudent(d);
     art.giveAllMarks(t);
-    art.giveAllMarks(t);
     art.showw();
+
+    FiveGiver_Tecaher t2;
+    Class hist;
+    hist.addStudent(b);
+    hist.giveAllMarks(t2);
+    hist.showw();
+
+    TwoGiver_Teacher t3;
+    Class math;
+    math.addStudent(d);
+    math.giveAllMarks(t3);
+    math.showw();
 
     return 0;
 }
