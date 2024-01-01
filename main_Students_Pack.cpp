@@ -218,11 +218,21 @@ private:
 
 class Parent{
 private:
+    bool isBabushka = 0;
+protected:
     bool mood = rand() % 2;
     vector<Student> children;
     set<string> children_list;
 public:
-
+    string sayTHE_BEST(){
+        return "THE BEST!";
+    };
+    bool checkBabushka(){
+        return isBabushka;
+    }
+    virtual bool Bch(){
+        return 0;
+    }
 
     void addChild(Student &child){
         children.push_back(child);
@@ -282,17 +292,28 @@ public:
     vector<Student> getChildren(){
         return children;
     }
+};
 
+class Babushka: public Parent{
+public:
+    bool Bch() override{
+        return 1;
+    }
+private:
+    bool isBabushka = 1;
 };
 
 class Meeting{
 private:
     set<string> listt;
     set<string> listt2;
-    vector<Parent> p;
+    vector<Parent*> p;
     vector<Teacher> t;
     vector<Class> c;
 public:
+    void check(){
+
+    }
     Meeting(){cout<<"New meeting starts"<<endl;}
     void showListt(){
         if (listt2.size() == 0) {cout<<endl; return;}
@@ -302,8 +323,11 @@ public:
     }
         cout<<endl;
     }
-    void addParent(Parent &parent){
+    void addParent(Parent *parent){
         p.push_back(parent);
+    }
+    void addParent(Babushka *babushka){
+        p.push_back(babushka);
     }
     void addTeacher(Teacher &teacher){
         t.push_back(teacher);
@@ -312,6 +336,7 @@ public:
         c.push_back(clas);
     }
     void talkAbout(){
+
         for (int i = 0; i<c.size(); i++){ // уроки 0-i
             for (int check = 0; check < t.size(); check++){
                 if (t[check].getName() == c[i].getTeacherName()) goto here;
@@ -322,15 +347,16 @@ public:
             cout<<c[i].getClassName()<<" class: "<<endl;
             for (int j = 0; j< p.size(); j++){
                 cout<<"Parent "<<(j+1)<<": ";
-                for (int k = 0; k<p[j].getChildren().size(); k++){
+                for (int k = 0; k<p[j]->getChildren().size(); k++){
                     for (int n = 0; n < (c[i].getAllStudents()).size(); n++){
 
-                            if ((c[i].getAllStudents())[n].getName() == p[j].getChildren()[k].getName())
+                            if ((c[i].getAllStudents())[n].getName() == p[j]->getChildren()[k].getName())
                             {
 
-                                Student temp = (p[j].getChildren()[k]);
-                                if (c[i].CertainIsFivePointer(c[i].getAllStudents()[n])) cout<<temp.getName()<<"'s working nice. ";
-                                else cout<<temp.getName()<<"'s trying her(his) best. ";
+                                Student temp = (p[j]->getChildren()[k]);
+                                if (c[i].CertainIsFivePointer(c[i].getAllStudents()[n])) {if (p[j]->Bch()) (cout<<temp.getName()<<"'s "<<p[j]->sayTHE_BEST()); else cout<<temp.getName()<<"'s working nice. ";}
+                                else {if (p[j]->Bch()) (cout<<temp.getName()<<"'s "<<p[j]->sayTHE_BEST()); else cout<<temp.getName()<<"'s trying her(his) best. ";}
+
                             }
                     }
                 }
@@ -343,7 +369,7 @@ public:
             for (int j = 0; j<p.size(); j++){
 
                    for (int n = 0; n < (c[i].getAllStudents()).size(); n++){
-                        if ((p[j].getList().count(((c[i].getAllStudents())[n]).getName()))) listt.insert(((c[i].getAllStudents())[n]).getName());
+                        if ((p[j]->getList().count(((c[i].getAllStudents())[n]).getName()))) listt.insert(((c[i].getAllStudents())[n]).getName());
                    }
             }
         }
@@ -379,7 +405,7 @@ int main()
     e.giveMark(5);
     p2.addChild(e);
 
-    Parent p3;
+    Babushka p3; //Появление БАБУШКИ
     Student f("Kate");
     f.giveMark(4);
     p3.addChild(f);
@@ -400,7 +426,7 @@ int main()
     Meeting m1;
     m1.addTeacher(t1);
     //m1.addTeacher(t2); Ситуация, когда учитель не пришёл на собрание (выводится сообщение о его отсутствии)
-    m1.addParent(p1); m1.addParent(p2);m1.addParent(p3);
+    m1.addParent(&p1); m1.addParent(&p2);m1.addParent(&p3);
     m1.addClass(art);
     m1.addClass(mat);
     m1.talkAbout();
@@ -408,9 +434,9 @@ int main()
 
     Meeting m2;
     m2.addTeacher(t2);
-    //m2.addParent(p1); Ситуация,когда родитель не пришёл на собрание (в конце выводится список детей, у которых должны были прийти родители на обсуждение)
-    m2.addParent(p2);
-    m2.addParent(p3);
+    //m2.addParent(&p1); Ситуация,когда родитель не пришёл на собрание (в конце выводится список детей, у которых должны были прийти родители на обсуждение)
+    m2.addParent(&p2);
+    m2.addParent(&p3);
     m2.addClass(mat);
     m2.talkAbout();
     m2.showListt();
