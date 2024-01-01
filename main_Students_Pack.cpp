@@ -12,6 +12,7 @@ private:
 
 public:
     void show(){
+        cout<<"Marks are: ";
         for (int i = 0; i<marks.size();i++){
             cout<<marks[i]<<" ";
         }
@@ -29,12 +30,12 @@ public:
         }
         sum = sum/(marks.size());
         if (sum == 5){
-            cout<<"Five-pointer"<<endl;
+           // cout<<"Five-pointer"<<endl;
             sum = 0;
             return 1;
         }
         else {
-            cout<<"NO Five-pointer"<<endl;
+           // cout<<"NO Five-pointer"<<endl;
             sum = 0;
             return 0;
         }
@@ -65,19 +66,52 @@ public:
     }
 };
 
+class Class{
+public:
+    void addStudent(Student &stud){
+        studList.push_back(stud);
+    }
+    void giveAllMarks(Teacher &teach){
+        for (int i = 0; i<studList.size();i++){
+            teach.markStudent(studList[i]);
+        }
+    }
+
+    void showw(){
+        int num = 0;
+        for (int i = 0; i<studList.size();i++){
+            num ++; cout<<num<<" student's marks are: ";
+            studList[i].show();
+        }
+        cout<<endl;
+    }
+    Student getStudent(int num){
+        return studList[num];
+    }
+private:
+    vector<Student> studList;
+};
+
 int main()
 {
     srand(time(NULL));
-    Student a;
+    Student a,b,c,d;
     a.giveMark(5);
-    a.giveMark(5);
-    a.isFivePointer();
+    b.giveMark(3);
+    c.giveMark(4);
+    d.giveMark(5);
 
     Teacher t;
     t.setMood(0);
-    t.markStudent(a);
 
-    a.show();
-    a.isFivePointer();
+    Class art;
+    art.addStudent(a);
+    art.addStudent(b);
+    art.addStudent(c);
+    art.addStudent(d);
+    art.giveAllMarks(t);
+    art.giveAllMarks(t);
+    art.showw();
+
     return 0;
 }
