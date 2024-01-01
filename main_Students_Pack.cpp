@@ -9,8 +9,13 @@ class Student{
 private:
 
     vector<int> marks;
+    string name;
 
 public:
+    string getName(){
+        return name;
+    }
+    Student(string na): name(na){};
     void show(){
         cout<<"marks are: ";
         for (int i = 0; i<marks.size();i++){
@@ -26,7 +31,7 @@ public:
     bool isFivePointer(){
         float sum;
         for (int i = 0; i<marks.size(); i++){
-            sum += marks[i];
+             sum += marks[i];
         }
         sum = sum/(marks.size());
         if (sum == 5){
@@ -161,42 +166,85 @@ private:
     vector<Student> studList;
 };
 
+class Parent{
+private:
+    bool mood = rand() % 2;
+    vector<Student> children;
+public:
+
+    void addChild(Student &child){
+        children.push_back(child);
+    }
+
+    void sayAboutEach(){
+        if (children.size()==0) return;
+        for (int i = 0; i<children.size();i++){
+            if (children[i].isFivePointer() && mood == 1) cout<<children[i].getName()<<"'s the best. ";
+            if (children[i].isFivePointer() && mood == 0) cout<<children[i].getName()<<"'s the best, but...would be better. ";
+            if (!(children[i].isFivePointer()) && mood == 1) cout<<children[i].getName()<<"'s doing well. ";
+            if (!(children[i].isFivePointer()) && mood == 0) cout<<children[i].getName()<<"'s...oh, so sad";
+        }
+        cout<<endl;
+    }
+    void sayAboutRandom(){
+        int num = rand() % children.size();
+        if (children[num].isFivePointer() && mood == 1) cout<<children[num].getName()<<"'s the best. ";
+        if (children[num].isFivePointer() && mood == 0) cout<<children[num].getName()<<"'s the best, but...would be better. ";
+        if (!(children[num].isFivePointer()) && mood == 1) cout<<children[num].getName()<<"'s doing well. ";
+        if (!(children[num].isFivePointer()) && mood == 0) cout<<children[num].getName()<<"'s...oh, so sad";
+        cout<<endl;
+    }
+    void sayAboutGeneral(){
+        bool marker = 1;
+        for (int i = 0; i<children.size(); i++){
+            if (children[i].isFivePointer()) continue;
+            else marker = 0;
+        }
+        if (marker == 1 && mood == 1) cout<<"They're all the best"<<endl;
+        if (marker == 1 && mood == 0) cout<<"They're all nice...yes, nice"<<endl;
+        if (marker == 0 && mood == 1) cout<<"They're doing well, but would be better"<<endl;
+        if (marker == 0 && mood == 0) cout<<"They're...oh, at list they're trying suppose"<<endl;
+    }
+    void sayAboutCertain(string NAME){
+        int counter = 10000;
+        for (int i = 0; i<children.size(); i++){
+            if ((children[i].getName()) == NAME) counter = i;
+            else continue;
+        }
+        if (counter != 10000){
+            bool marker = 1;
+            for (int i = 0;i<children.size(); i++){
+                if (!children[i].isFivePointer()) marker = 0;
+        }
+            if (marker == 1 && mood == 1) cout<<children[counter].getName()<<"'s the best"<<endl;
+            if (marker == 1 && mood == 0) cout<<children[counter].getName()<<"'s the best, but...would be better. "<<endl;
+            if (marker == 0 && mood == 1) cout<<children[counter].getName()<<"'s doing well. "<<endl;
+            if (marker == 0 && mood == 0) cout<<children[counter].getName()<<"'s...oh, so sad"<<endl;
+    }
+    else cout<<NAME<<" isn't my chid"<<endl;
+    }
+
+};
+
 int main()
 {
     srand(time(NULL));
-    Student a,b,c,d;
+    Student a("Nick"),b("Jimy"),c("Bob"),d("Liza");
     a.giveMark(5);
     b.giveMark(3);
     c.giveMark(4);
     d.giveMark(5);
 
-    Teacher t;
-    t.setMood(0);
-
-    Class art;
-    art.addStudent(a);
-    art.addStudent(b);
-    art.addStudent(c);
-    art.addStudent(d);
-    art.giveAllMarks(t);
-    art.giveAllMarks(t);
-    art.giveAllMarks(t);
-    art.giveAllMarks(t);
-    art.giveAllMarks(t);
-    art.showw();
-
-    Class mat;
-    mat.addStudent(a);
-    mat.addStudent(b);
-    mat.addStudent(c);
-    mat.addStudent(d);
-    UnstableMood_Teaher t3;
-    mat.giveAllMarks(t3);
-    mat.giveAllMarks(t3);
-    mat.giveAllMarks(t3);
-    mat.giveAllMarks(t3);
-    mat.giveAllMarks(t3);
-    mat.showw();
+    Parent p;
+    p.addChild(a);
+    p.addChild(b);
+    p.addChild(c);
+    p.addChild(d);
+    p.sayAboutEach();
+    p.sayAboutRandom();
+    p.sayAboutGeneral();
+    p.sayAboutCertain("Liza");
+    p.sayAboutCertain("Stifler");
 
     return 0;
 }
