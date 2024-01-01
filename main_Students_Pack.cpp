@@ -1,5 +1,7 @@
 #include <iostream>
 #include <vector>
+#include <cstdlib>
+#include <ctime>
 
 using namespace std;
 
@@ -9,6 +11,13 @@ private:
     vector<int> marks;
 
 public:
+    void show(){
+        for (int i = 0; i<marks.size();i++){
+            cout<<marks[i]<<" ";
+        }
+        cout<<endl;
+    }
+
     void giveMark(int m){
         marks.push_back(m);
     }
@@ -21,33 +30,54 @@ public:
         sum = sum/(marks.size());
         if (sum == 5){
             cout<<"Five-pointer"<<endl;
+            sum = 0;
             return 1;
         }
         else {
             cout<<"NO Five-pointer"<<endl;
+            sum = 0;
             return 0;
         }
     }
+
 };
 
 class Teacher{
+private:
+    bool mood = rand()%2;
 public:
-    void markStudent(Student &student, int MARK){
-        student.giveMark(MARK);
+    void setMood(bool moo = 1){
+        mood = moo;
+        if (mood == 0) cout<<"Mood is bad"<<endl;
+        else cout<<"Mood is well"<<endl;
+    }
+    void markStudent(Student &student){
+        int randVal = rand() % 2;
+
+        if ((mood == 1) && (student.isFivePointer()))
+            student.giveMark(5);
+        else if ((mood == 0) && (student.isFivePointer()))
+            student.giveMark(5*randVal + 4*(1-randVal));
+        else if ((mood == 1) && !(student.isFivePointer()))
+            student.giveMark(4);
+        else if ((mood == 0) && !(student.isFivePointer()))
+            student.giveMark(3*randVal + 2*(1-randVal));
     }
 };
 
 int main()
 {
+    srand(time(NULL));
     Student a;
     a.giveMark(5);
     a.giveMark(5);
     a.isFivePointer();
 
     Teacher t;
-    t.markStudent(a,4);
+    t.setMood(0);
+    t.markStudent(a);
 
+    a.show();
     a.isFivePointer();
-
     return 0;
 }
